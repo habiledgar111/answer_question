@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.soal.soalmii.DTO.client.ClientResponse;
 import com.soal.soalmii.DTO.client.ResultDTO;
+import com.soal.soalmii.DTO.response.ApiResponse;
+import com.soal.soalmii.DTO.response.MessageType;
 import com.soal.soalmii.api.IndonesianAddressProviderClient;
 
 import lombok.AllArgsConstructor;
@@ -16,22 +17,30 @@ public class IndonesianAddressService {
   private IndonesianAddressProviderClient indonesianAddressProviderClient;
   
   public List<ResultDTO> getAllProvinsi(){
-    ClientResponse<ResultDTO> response = indonesianAddressProviderClient.getProvinsi();
-
-    if(response == null || response.getStatus() != 200){
-      throw new RuntimeException("Data Tidak Ada Saat Consume Api");
-    }
-
-    return response.getResult();
+    return indonesianAddressProviderClient.getProvinsi().getResult();
   }
 
   public List<ResultDTO> getAllCity(String id){
-    ClientResponse<ResultDTO> response = indonesianAddressProviderClient.getCityFromProvinsi(id);
+    return indonesianAddressProviderClient.getCityFromProvinsi(id).getResult();
+  }
 
-    if(response == null || response.getStatus() != 200){
-      throw new RuntimeException("Data Tidak Ada Saat Consume Api");
+  public ApiResponse cekAlamat(String provinsi, String kota){
+    List<ResultDTO> provinsiAfterFiler =  getAllProvinsi().stream().filter(p -> p.getText().equalsIgnoreCase(provinsi)).toList();
+
+    if(provinsiAfterFiler.isEmpty()){
+      return new ApiResponse(0,MessageType.TIDAK_SESUAI.getLabel());
+    }
+    
+    boolean cityIsExist = false;
+    // untuk mencegah semisal jika ada nama provinsi yang sama 
+    for(int i = 0; i< provinsiAfterFiler.size();i++){
+      cityIsExist = getAllCity(provinsiAfterFiler.get(i).getId()).stream().anyMatch(k -> k.getText().equalsIgnoreCase(kota));
     }
 
-    return response.getResult();
+    if(!cityIsExist){
+      return new ApiResponse(0, MessageType.TIDAK_SESUAI.getLabel());
+    }
+
+    return new ApiResponse(1, MessageType.SESUAI.getLabel());
   }
 }
