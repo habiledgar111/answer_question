@@ -8,4 +8,4 @@
 disertakan postman dokumentasi untuk hasil selesai di jalankan
 
 NB : 
-sever berjalan di localhost dengan port 8080 dan menggunakan library webflux untuk mempermudah consume rest api
+sever berjalan di localhost dengan port 8080 dan menggunakan java dengan springboot sebagai framework dan library webflux untuk mempermudah consume rest api
