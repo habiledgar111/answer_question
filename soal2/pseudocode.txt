@@ -1,0 +1,25 @@
+printbox(int n, boolean boxHasCreated){
+  
+  if n < 2 do : 
+  return print "nilai terlalu kecil"
+
+  if n >= 10 do :
+  return print "nilai terlalu bersar"
+
+  for i <- 0 < n do : 
+    for j <- 0 < n do :
+      if i == 0 || i == n-1 do : 
+        print "="
+        continue j loop;
+      if j == 0 || j == n-1 do :
+        print "|"
+      else do : 
+        print " "
+    if !boxHasCreated do :
+    println ""
+}
+
+
+NB : pseudo code diatas adalah function yang bisa digunakan 2 kali,yaitu : 
+1. pertama untuk print dalam bentuk box maka boxHasCreated akan diisi false
+2. kedua untuk print dalam bentuk satu baris maka boxHasCreated akan diisi true
