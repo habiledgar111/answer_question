@@ -1,6 +1,6 @@
 printbox(int n, boolean boxHasCreated){
   
-  if n < 2 do : 
+  if n <= 2 do : 
   return print "nilai terlalu kecil"
 
   if n >= 10 do :
